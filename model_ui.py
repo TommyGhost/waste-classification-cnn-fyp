@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 
 # Load your FastAI model
-learn = load_learner('export10.pkl')
+learn = load_learner('exportCNN10.pkl')
 
 # Create a Streamlit app
 st.title('Waste Classification App')
