@@ -1,11 +1,22 @@
 # Import necessary libraries
 import streamlit as st
 from fastai.vision.all import *
-from PIL import Image
-import numpy as np
+import gdown
+import os
 
-# Load your FastAI model
-learn = load_learner('exportCNN10.pkl')
+# URL of the model on Google Drive
+model_url = 'https://drive.google.com/uc?id=1ELrjuiTUX5V3c1vFdqgD0NQkaCDU2p1_'
+model_path = 'exportCNN10.pkl'
+
+# Function to download and load the model, cached to avoid repeated downloads
+@st.cache_resource(show_spinner=True)
+def load_model():
+    if not os.path.exists(model_path):
+        gdown.download(model_url, model_path, quiet=False)
+    return load_learner(model_path, cpu=True)
+
+# Load the model
+learn = load_model()
 
 # Create a Streamlit app
 st.title('Waste Classification App')
@@ -18,7 +29,6 @@ if uploaded_file is not None:
     image = load_image(uploaded_file)
 
 # Make predictions and display results
-if st.button('Predict'):
     st.write('Predicting...')
     pred, pred_idx, probs = learn.predict(image)
     disposal_type = {
