@@ -3,6 +3,9 @@ import streamlit as st
 from fastai.vision.all import *
 import gdown
 import os
+import platform
+import pathlib
+from pathlib import PosixPath
 
 # URL of the model on Google Drive
 model_url = 'https://drive.google.com/uc?id=1ELrjuiTUX5V3c1vFdqgD0NQkaCDU2p1_'
@@ -13,6 +16,10 @@ model_path = 'exportCNN10.pkl'
 def load_model():
     if not os.path.exists(model_path):
         gdown.download(model_url, model_path, quiet=False)
+        
+    # Fix path issue when model is exported on Windows but run on Linux
+    if platform.system() != "Windows":
+        pathlib.WindowsPath = PosixPath 
     return load_learner(model_path, cpu=True)
 
 # Load the model
