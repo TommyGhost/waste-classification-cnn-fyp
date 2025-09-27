@@ -1,0 +1,13 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    - cron: "0 */9 * * *"   # every 9 hours (UTC)
+  workflow_dispatch:        # lets you run manually
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl Streamlit app
+        run: curl -s https://waste-classification-cnn-tommyani-fyp.streamlit.app/ > /dev/null
