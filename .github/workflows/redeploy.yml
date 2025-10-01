@@ -1,0 +1,19 @@
+name: Keep Streamlit Alive
+
+on:
+  schedule:
+    - cron: "0 */9 * * *"   # every 9 hours
+  workflow_dispatch:        # lets you run it manually if needed
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Trigger redeploy
+        run: |
+          git commit --allow-empty -m "chore: trigger Streamlit redeploy [skip ci]" || echo "No changes to commit"
+          git push
